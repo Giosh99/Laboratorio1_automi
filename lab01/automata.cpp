@@ -1,6 +1,6 @@
 #include <iostream>
 #include "automata.h"
-
+#include <assert.h>
 using namespace std;
 
 /**
