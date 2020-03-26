@@ -5,6 +5,7 @@
 #include<vector>
 
 using namespace std;
+
 typedef std::pair<int,char> tpair;
 
 /**
@@ -16,42 +17,15 @@ class AbstractDFA {
 	// - final states (and sink states)
 	// - transitions of the form (state, input) -> state
 	// - current state
-	// l'identificativo degli stati comincia con il valore 0 come in jFlap.
-    vector<int> states; 
-	map<pair<int*, char>, int*> tr;
-	int* current;
-	int* start;
-	int* final;
-	void initializeVector(int n) {
-		int a = 0;
-		for(vector<int>::iterator it = states.begin; it!=states.end(); it++) {
-			*it = a;
-			a++;
-		}
-	}
+    
 public:
-void defineInitialeState(int i) {
-	start = &states[i];
-}
-void defineFinalState(int i) {
-	final = &states[i];
-}
-/**
- * funzione per definire transizioni
-*/
-	void defineTransaction(int* source, char c, int* destination) {
-		tr. insert(make_pair(make_pair(source, c),destination));
-	}
 	/**
 	 * Constructor for Abstract DFA.
 	 * 
 	 * @param noStates
 	 *            Number of states in the DFA.
 	 */
-
-	AbstractDFA(int noStates) {
-		initializeVector(noStates);
-	};
+	AbstractDFA(int noStates);
 
 	/**
 	 * Reset the automaton to the initial state.
@@ -127,5 +101,4 @@ public:
 	 */
     virtual void doStep(char letter);
 };
-
 

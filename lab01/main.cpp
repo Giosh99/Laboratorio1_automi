@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "automata.h"
+#include "automata_vero.cpp"
 
 using namespace std;
 
