@@ -70,6 +70,12 @@ void defineFinalState(int i) {
 		delete final;
 		delete sink;
 		delete start;
+		states->clear();
+		tr->clear();
+		states->~vector();
+		tr->~map();
+		delete states;
+		delete tr;
 	}
 
 	/**
@@ -163,7 +169,33 @@ public:
 	 * with a newline and a multiline comment that starts with / * and ends with
 	 * * / (without the spaces)
 	 */
-	CommentDFA(); 
+	CommentDFA():AbstractDFA(8){ //6  per commento inline e 3 per commento multiline
+		defineTransaction(start,'/',&(*states)[1]);
+		// mancano for q1 e q0
+		defineTransaction(&(*states)[1],'/',&(*states)[2]);
+		for(int i = 0; i<255; i++) {
+			if(i!=92)
+				defineTransaction(&(*states)[2],i,&(*states)[2]);
+		}
+		defineTransaction(&(*states)[2],'/',&(*states)[3]);
+		for(int i = 0; i<255; i++) {
+			if(i!=110)
+				defineTransaction(&(*states)[3],i,sink);
+		}
+		defineTransaction(&(*states)[3],'n',&(*states)[6]);
+		defineTransaction(&(*states)[1],'*',&(*states)[4]);
+		for(int i = 0; i<255; i++) {
+			if(i!=42)
+				defineTransaction(&(*states)[4],i,&(*states)[4]);
+		}
+		defineTransaction(&(*states)[4],'*',&(*states)[5]);
+		defineTransaction(&(*states)[5],'*',&(*states)[5]);
+		for(int i = 0; i<255; i++) {
+			if(i!=42)
+				defineTransaction(&(*states)[5],i,&(*states)[4]);
+		}
+		
+	}; 
 	
 	/**
 	 * Performs one step of the DFA for a given letter. This method works
@@ -172,5 +204,7 @@ public:
 	 * @param letter
 	 *            The current input.
 	 */
-    virtual void doStep(char letter);
+    virtual void doStep(char letter) { 
+		tr->insert(<pai)
+	};
 };
