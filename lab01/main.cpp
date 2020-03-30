@@ -28,8 +28,8 @@ int main(int argc, char* argv[]) {
 	WordDFA whileDFA("while");
 	cout << "WHILE: " << whileDFA.run(inputProgram) << endl;
 	// Try to recognize with automaton for comments
-	CommentDFA commentDFA; 
-	cout << "COMMENT: " << commentDFA.run(inputProgram) << endl;
+	//CommentDFA commentDFA; 
+	//cout << "COMMENT: " << commentDFA.run(inputProgram) << endl;
 
     return 0;
 }

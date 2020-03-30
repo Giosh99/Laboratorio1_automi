@@ -64,6 +64,12 @@ void defineFinalState(int i) {
 		final = &states[noStates-1];
 		sink = &states[noStates];
 	};
+	~AbstractDFA() {
+		delete current;
+		delete final;
+		delete sink;
+		delete start;
+	}
 
 	/**
 	 * Reset the automaton to the initial state.
