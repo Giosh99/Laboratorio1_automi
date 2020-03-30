@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include<assert.h>
 #include "automata_vero.cpp"
 
 using namespace std;
@@ -26,10 +27,11 @@ int main(int argc, char* argv[]) {
     inputFile.close();
     // Try to recognize with automaton for "while"
 	WordDFA whileDFA("while");
-	cout << "WHILE: " << whileDFA.run(inputProgram) << endl;
-	// Try to recognize with automaton for comments
+	//cout << "WHILE: " << whileDFA.run(inputProgram) << endl;
+    cout<<"prova"<<endl;
+	 //Try to recognize with automaton for comments
 	//CommentDFA commentDFA; 
 	//cout << "COMMENT: " << commentDFA.run(inputProgram) << endl;
 
-    return 0;
+    //return 0;
 }

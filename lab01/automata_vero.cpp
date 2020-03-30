@@ -1,8 +1,9 @@
-#pragma once
+//#pragma once
 
 #include<iostream>
 #include<map>
 #include<vector>
+
 
 using namespace std;
 typedef std::pair<int,char> tpair;
@@ -22,34 +23,34 @@ class AbstractDFA {
 	// - current state
 	// l'identificativo degli stati comincia con il valore 0 come in jFlap.
 	protected:
-	vector<int> states; 
-	map<pair<int*, char>, int*> tr;
+	vector<int> *states; 
+	map<pair<int*, char>, int*> *tr;
 	int* current;
 	int* start;
 	int* final;
     int* sink;
 	void initializeVector(int n) {
 		int a = 0;
-		for(vector<int>::iterator it = states.begin(); it!=states.end(); it++) {
+		for(vector<int>::iterator it = states->begin(); it!=states->end(); it++) {
 			*it = a;
 			a++;
 		}
 	}
 public:
 void defineSinkState(int i) {
-	sink = &states[i];
+	sink = &((*states)[i]);
 }
 void defineInitialeState(int i) {
-	start = &states[i];
+	start = &((*states)[i]);
 }
 void defineFinalState(int i) {
-	final = &states[i];
+	final = &((*states)[i]);
 }
 /**
  * funzione per definire transizioni
 */
 	void defineTransaction(int* source, char c, int* destination) {
-		tr. insert(make_pair(make_pair(source, c),destination));
+		tr->insert(make_pair(make_pair(source, c),destination));
 	}
 	/**
 	 * Constructor for Abstract DFA.
@@ -58,11 +59,11 @@ void defineFinalState(int i) {
 	 *            Number of states in the DFA.
 	 */
 
-	AbstractDFA(int noStates): current(start){
+	AbstractDFA(int noStates): states(new vector<int>()), tr(new map<pair<int*, char>, int*>()),current(start){
 		initializeVector(noStates);
-		start = &states[0];
-		final = &states[noStates-1];
-		sink = &states[noStates];
+		start = &(*states)[0];
+		final = &(*states)[noStates-1];
+		sink = &(*states)[noStates];
 	};
 	~AbstractDFA() {
 		delete current;
@@ -89,7 +90,7 @@ void defineFinalState(int i) {
 	 */
 	virtual void doStep(char letter) {
         bool found = false;
-        for(map<pair<int*, char>, int*>::iterator it=tr.begin(); it!=tr.end(); ++it) {
+        for(map<pair<int*, char>, int*>::iterator it=tr->begin(); it!=tr->end(); ++it) {
             if(it->first == pair<int*,char>(current, letter)) {
                 current = it->second;
                 found = true;
@@ -145,7 +146,7 @@ public:
 	
 	 WordDFA(const string &word): AbstractDFA(word.length() +1){
 		 for(int i =0;i<word.length();i++) {
-			 tr.insert({pair<int*, char>(&states[i],word[i]), &states[i+1]});
+			 tr->insert({pair<int*, char>(&(*states)[i],word[i]), &(*states)[i+1]});
 		 }
 	 }
 };
@@ -173,4 +174,3 @@ public:
 	 */
     virtual void doStep(char letter);
 };
-
