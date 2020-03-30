@@ -170,31 +170,54 @@ public:
 	 * * / (without the spaces)
 	 */
 	CommentDFA():AbstractDFA(8){ //6  per commento inline e 3 per commento multiline
-		defineTransaction(start,'/',&(*states)[1]);
-		// mancano for q1 e q0
-		defineTransaction(&(*states)[1],'/',&(*states)[2]);
-		for(int i = 0; i<255; i++) {
+		defineTransaction(start,'/',&(*states)[1]);		//da q0 a q1
+		for(int i = 0; i<255; i++) {				//sink state da q0
+			if(i!=47)
+				defineTransaction(&(*states)[0],i,sink);
+		}
+		
+		for(int i = 0; i<255; i++) {				//sink state da q1
+			if(i!=47)
+				defineTransaction(&(*states)[1],i,sink);
+		}
+		
+		defineTransaction(&(*states)[1],'/',&(*states)[2]);	//da q1 a q2
+		
+		for(int i = 0; i<255; i++) {				//self-loop su q2
 			if(i!=92)
 				defineTransaction(&(*states)[2],i,&(*states)[2]);
 		}
-		defineTransaction(&(*states)[2],'/',&(*states)[3]);
-		for(int i = 0; i<255; i++) {
+		
+		defineTransaction(&(*states)[2],'/',&(*states)[3]);	//da q2 a q3
+		
+		for(int i = 0; i<255; i++) {				//sink state da q3
 			if(i!=110)
 				defineTransaction(&(*states)[3],i,sink);
 		}
-		defineTransaction(&(*states)[3],'n',&(*states)[6]);
-		defineTransaction(&(*states)[1],'*',&(*states)[4]);
-		for(int i = 0; i<255; i++) {
+		
+		defineTransaction(&(*states)[3],'n',&(*states)[6]);	//da q3 a q6
+		defineTransaction(&(*states)[1],'*',&(*states)[4]);	//da q1 a q4
+		
+		for(int i = 0; i<255; i++) {				//self-loop su q4
 			if(i!=42)
 				defineTransaction(&(*states)[4],i,&(*states)[4]);
 		}
-		defineTransaction(&(*states)[4],'*',&(*states)[5]);
-		defineTransaction(&(*states)[5],'*',&(*states)[5]);
-		for(int i = 0; i<255; i++) {
+		
+		defineTransaction(&(*states)[4],'*',&(*states)[5]);	//da q4 a q5
+		defineTransaction(&(*states)[5],'*',&(*states)[5]);	//self-loop su q5
+		
+		for(int i = 0; i<255; i++) {				//da q4 a q5
 			if(i!=42)
 				defineTransaction(&(*states)[5],i,&(*states)[4]);
 		}
+		defineTransaction(&(*states)[5],'/',&(*states)[6]);	//da q5 a q6
 		
+		for(int i = 0; i<255; i++) {				//sink state da q6
+				defineTransaction(&(*states)[6],i,sink);
+		}
+		for(int i = 0; i<255; i++) {				//self-loop su sink state
+				defineTransaction(sink,i,sink);
+		}
 	}; 
 	
 	/**
