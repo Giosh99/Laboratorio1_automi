@@ -4,11 +4,10 @@
 #include<map>
 #include<vector>
 
-
 using namespace std;
 typedef std::pair<int,char> tpair;
 
-// ridefinizione == per oggetti di tipo pair
+ //ridefinizione == per oggetti di tipo pair
  bool operator== (const pair<int*,char>& lhs, const pair<int*,char>& rhs)
 { return lhs.first==rhs.first && lhs.second==rhs.second; }
 
@@ -169,7 +168,7 @@ public:
 	 * with a newline and a multiline comment that starts with / * and ends with
 	 * * / (without the spaces)
 	 */
-	CommentDFA():AbstractDFA(8){ //6  per commento inline e 3 per commento multiline
+	CommentDFA():AbstractDFA(8), ok(false){ //6  per commento inline e 3 per commento multiline
 		defineTransaction(start,'/',&(*states)[1]);		//da q0 a q1
 		for(int i = 0; i<255; i++) {				//sink state da q0
 			if(i!=47)
@@ -227,7 +226,12 @@ public:
 	 * @param letter
 	 *            The current input.
 	 */
-    virtual void doStep(char letter) { 
-		tr->insert(<pai)
+    virtual void doStep(char letter) { // 
+		//std::string letter;
+        for(map<pair<int*, char>, int*>::iterator it=tr->begin(); it!=tr->end(); ++it) {
+            if(it->first == pair<int*,char>(current, letter)) {
+                current = it->second;
+            }
+        }
 	};
 };

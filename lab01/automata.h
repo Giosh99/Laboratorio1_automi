@@ -1,9 +1,8 @@
 #pragma once
-
 #include<iostream>
 #include<map>
 #include<vector>
-
+using std::vector;
 using namespace std;
 
 typedef std::pair<int,char> tpair;
@@ -11,13 +10,21 @@ typedef std::pair<int,char> tpair;
 /**
  * Abstract class for Deterministic Finite Automata.
  */
+bool operator== (const pair<int*,char>& lhs, const pair<int*,char>& rhs);
 class AbstractDFA {
 	// TODO: use data structure for representing
 	// - states
 	// - final states (and sink states)
 	// - transitions of the form (state, input) -> state
 	// - current state
-    
+	protected:
+    vector<int> *states; 
+	map<pair<int*, char>, int*> *tr;
+	int* current;
+	int* start;
+	int* final;
+    int* sink;
+	void initializeVector(int n);
 public:
 	/**
 	 * Constructor for Abstract DFA.
@@ -26,7 +33,11 @@ public:
 	 *            Number of states in the DFA.
 	 */
 	AbstractDFA(int noStates);
-
+	~AbstractDFA();
+	void defineSinkState(int i);
+	void defineInitialeState(int i);
+	void defineFinalState(int i);
+	void defineTransaction(int* source, char c, int* destination);
 	/**
 	 * Reset the automaton to the initial state.
 	 */
@@ -90,6 +101,7 @@ public:
 	 * with a newline and a multiline comment that starts with / * and ends with
 	 * * / (without the spaces)
 	 */
+	bool ok;
 	CommentDFA();
 	
 	/**
