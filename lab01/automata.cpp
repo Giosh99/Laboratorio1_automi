@@ -10,10 +10,8 @@ typedef std::pair<int,char> tpair;
 { return lhs.first==rhs.first && lhs.second==rhs.second; }
 
 void AbstractDFA::initializeVector(int n) {
-	int a = 0;
-	for(vector<int>::iterator it = states->begin(); it!=states->end(); it++) {
-		*it = a;
-		a++;
+	for(int i =0; i<n;i++) {
+		states->push_back(i);
 	}
 }
 void AbstractDFA::defineSinkState(int i) {
@@ -25,24 +23,16 @@ void AbstractDFA::defineInitialeState(int i) {
 void AbstractDFA::defineFinalState(int i) {
 	final = &((*states)[i]);
 }
-/**
- * funzione per definire transizioni
-*/
 	void AbstractDFA::defineTransaction(int* source, char c, int* destination) {
 		tr->insert(make_pair(make_pair(source, c),destination));
 	}
-	/**
-	 * Constructor for Abstract DFA.
-	 * 
-	 * @param noStates
-	 *            Number of states in the DFA.
-	 */
 
-	AbstractDFA::AbstractDFA(int noStates): states(new vector<int>()), tr(new map<pair<int*, char>, int*>()),current(start){
+	AbstractDFA::AbstractDFA(int noStates): states(new vector<int>()), tr(new map<pair<int*, char>, int*>()){
 		initializeVector(noStates);
 		start = &(*states)[0];
 		final = &(*states)[noStates-1];
 		sink = &(*states)[noStates];
+		current = start;
 	};
 	AbstractDFA::~AbstractDFA() {
 		delete current;
@@ -51,28 +41,12 @@ void AbstractDFA::defineFinalState(int i) {
 		delete start;
 		states->clear();
 		tr->clear();
-		states->~vector();
-		tr->~map();
-		delete states;
-		delete tr;
 	}
 
-	/**
-	 * Reset the automaton to the initial state.
-	 */
 	void AbstractDFA::reset() {
 		current = start;
 	}
 
-	/**
-	 * Performs one step of the DFA for a given letter. If there is a transition
-	 * for the given letter, then the automaton proceeds to the successor state.
-	 * Otherwise it goes to the sink state. By construction it will stay in the
-	 * sink for every input letter.
-	 * 
-	 * @param letter
-	 *            The current input.
-	 */
 	void AbstractDFA::doStep(char letter) {
         bool found = false;
         for(map<pair<int*, char>, int*>::iterator it=tr->begin(); it!=tr->end(); ++it) {
@@ -84,62 +58,25 @@ void AbstractDFA::defineFinalState(int i) {
 		if(!found)
 			current = sink;
     }
-	
-	/**
-	 * Check if the automaton is currently accepting.
-	 * 
-	 * @return True, if the automaton is currently in the accepting state.
-	 */
 	bool AbstractDFA::isAccepting() {
 		if(current==final) 
 			return true;
 		else return false;
 	}
-
-	/**
-	 * Run the DFA on the input.
-	 * 
-	 * @param inputWord
-	 *            stream that contains the input word
-	 * @return True, if if the word is accepted by this automaton
-	 */
 bool AbstractDFA::run(const string &inputWord) {
     this->reset();
     for(int i = 0; i < inputWord.length(); i++) {
         doStep(inputWord[i]);
+		cout<<*current<<endl;
     }
     return isAccepting();
 }
-
-/**
- * DFA recognizing a given word.
- */
-	/**
-	 * Construct a new DFA that recognizes exactly the given word. Given a word
-	 * "foo" the constructed automaton looks like: -> () -f-> () -o-> () -o-> []
-	 * from every state (including the final one) every other input letter leads
-	 * to a distinguished sink state in which the automaton then remains
-	 * 
-	 * @param word
-	 *            A String that the automaton should recognize
-	 */
-	/* chiedere per il sink state unico*/
 	
  WordDFA::WordDFA(const string &word): AbstractDFA(word.length() +1){
 	 for(int i =0;i<word.length();i++) {
 		 tr->insert({pair<int*, char>(&(*states)[i],word[i]), &(*states)[i+1]});
 	 }
  }
-
-/**
- * DFA recognizing comments.
- */
-	/**
-	 * Construct a new DFA that recognizes comments within source code. There
-	 * are two kinds of comments: A single line comment starts with // and ends
-	 * with a newline and a multiline comment that starts with / * and ends with
-	 * * / (without the spaces)
-	 */
 CommentDFA::CommentDFA():AbstractDFA(8), ok(false){ //6  per commento inline e 3 per commento multiline
 	defineTransaction(start,'/',&(*states)[1]);		//da q0 a q1
 	for(int i = 0; i<255; i++) {				//sink state da q0
@@ -191,13 +128,6 @@ CommentDFA::CommentDFA():AbstractDFA(8), ok(false){ //6  per commento inline e 3
 	}
 }
 	
-	/**
-	 * Performs one step of the DFA for a given letter. This method works
-	 * differently than in the superclass AbstractDFA.
-	 * 
-	 * @param letter
-	 *            The current input.
-	 */
      void CommentDFA::doStep(char letter) { // 
 		//std::string letter;
         for(map<pair<int*, char>, int*>::iterator it=tr->begin(); it!=tr->end(); ++it) {
