@@ -31,8 +31,10 @@ int main(int argc, char* argv[]) {
 	cout << "WHILE: " << whileDFA.run(inputProgram) << endl;
     cout<<"prova"<<endl;
 	 //Try to recognize with automaton for comments
-	//CommentDFA commentDFA; 
-	//cout << "COMMENT: " << commentDFA.run(inputProgram) << endl;
-
+	CommentDFA commentDFA; 
+	cout << "COMMENT: " << static_cast<bool>(commentDFA.run(inputProgram)) << endl;
+    for(map<pair<int*, char>, int*>::iterator it= commentDFA.tr->begin(); it!=commentDFA.tr->end();it++) {
+        cout<<"first: "<<*(it->first.first)<<"second: "<<*(it->first.first);
+    }
     //return 0;
 }

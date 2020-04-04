@@ -35,12 +35,13 @@ void AbstractDFA::defineFinalState(int i) {
 		current = start;
 	};
 	AbstractDFA::~AbstractDFA() {
-		delete current;
+	/*	delete current;
 		delete final;
 		delete sink;
-		delete start;
+		delete start;*/
 		states->clear();
 		tr->clear();
+
 	}
 
 	void AbstractDFA::reset() {
@@ -65,9 +66,11 @@ void AbstractDFA::defineFinalState(int i) {
 	}
 bool AbstractDFA::run(const string &inputWord) {
     this->reset();
+	cout<<endl;
     for(int i = 0; i < inputWord.length(); i++) {
+		cout<<"lettera"<<inputWord[i]<<endl;
         doStep(inputWord[i]);
-		cout<<*current<<endl;
+		cout<<"current: "<<*current<<endl;
     }
     return isAccepting();
 }
@@ -78,6 +81,7 @@ bool AbstractDFA::run(const string &inputWord) {
 	 }
  }
 CommentDFA::CommentDFA():AbstractDFA(8), ok(false){ //6  per commento inline e 3 per commento multiline
+	cout<<"start"<<*start<<endl;
 	defineTransaction(start,'/',&(*states)[1]);		//da q0 a q1
 	for(int i = 0; i<255; i++) {				//sink state da q0
 		if(i!=47)
@@ -96,15 +100,15 @@ CommentDFA::CommentDFA():AbstractDFA(8), ok(false){ //6  per commento inline e 3
 			defineTransaction(&(*states)[2],i,&(*states)[2]);
 	}
 	
-	defineTransaction(&(*states)[2],'/',&(*states)[3]);	//da q2 a q3
+	defineTransaction(&(*states)[2],'\n',&(*states)[6]);	//da q2 a q3
 	
-	for(int i = 0; i<255; i++) {				//sink state da q3
+/*	for(int i = 0; i<255; i++) {				//sink state da q3
 		if(i!=110)
 			defineTransaction(&(*states)[3],i,sink);
-	}
+	}*/
 	
-	defineTransaction(&(*states)[3],'n',&(*states)[6]);	//da q3 a q6
-	defineTransaction(&(*states)[1],'*',&(*states)[4]);	//da q1 a q4
+//	defineTransaction(&(*states)[3],'n',&(*states)[6]);	//da q3 a q6
+	defineTransaction(&(*states)[1],42,&(*states)[4]);	//da q1 a q4
 	
 	for(int i = 0; i<255; i++) {				//self-loop su q4
 		if(i!=42)
@@ -130,8 +134,11 @@ CommentDFA::CommentDFA():AbstractDFA(8), ok(false){ //6  per commento inline e 3
 	
      void CommentDFA::doStep(char letter) { // 
 		//std::string letter;
-        for(map<pair<int*, char>, int*>::iterator it=tr->begin(); it!=tr->end(); ++it) {
+		bool ok = false;
+        for(map<pair<int*, char>, int*>::iterator it=tr->begin(); it!=tr->end()&&!ok; it++) {
             if(it->first == pair<int*,char>(current, letter)) {
+				ok = true;
+				cout<<"second"<<*(it->second);
                 current = it->second;
             }
         }

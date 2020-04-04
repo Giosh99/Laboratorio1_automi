@@ -17,7 +17,7 @@ class AbstractDFA {
 	// - final states (and sink states)
 	// - transitions of the form (state, input) -> state
 	// - current state
-	protected:
+	public:
     vector<int> *states; 
 	map<pair<int*, char>, int*> *tr;
 	int* current;
