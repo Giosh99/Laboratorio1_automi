@@ -3,7 +3,6 @@
 #include <string>
 #include<assert.h>
 #include "automata.h"
-#include "automata.cpp"
 
 using namespace std;
 

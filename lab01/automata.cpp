@@ -35,10 +35,6 @@ void AbstractDFA::defineFinalState(int i) {
 		current = start;
 	};
 	AbstractDFA::~AbstractDFA() {
-	/*	delete current;
-		delete final;
-		delete sink;
-		delete start;*/
 		states->clear();
 		tr->clear();
 
