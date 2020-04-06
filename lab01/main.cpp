@@ -8,6 +8,7 @@
 using namespace std;
 
 int main(int argc, char* argv[]) {
+    
     if(argc != 2) {
         cout << "Usage: main filename" << endl;
         return 1;
@@ -29,12 +30,9 @@ int main(int argc, char* argv[]) {
     // Try to recognize with automaton for "while"
 	WordDFA whileDFA("while");
 	cout << "WHILE: " << whileDFA.run(inputProgram) << endl;
-    cout<<"prova"<<endl;
 	 //Try to recognize with automaton for comments
 	CommentDFA commentDFA; 
+
 	cout << "COMMENT: " << static_cast<bool>(commentDFA.run(inputProgram)) << endl;
-    for(map<pair<int*, char>, int*>::iterator it= commentDFA.tr->begin(); it!=commentDFA.tr->end();it++) {
-        cout<<"first: "<<*(it->first.first)<<"second: "<<*(it->first.first);
-    }
-    //return 0;
+    return 0;
 }

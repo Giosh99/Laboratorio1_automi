@@ -102,6 +102,7 @@ public:
 	 * * / (without the spaces)
 	 */
 	bool ok;
+	int ascii;
 	CommentDFA();
 	
 	/**
@@ -112,5 +113,6 @@ public:
 	 *            The current input.
 	 */
     virtual void doStep(char letter);
+	void stampa();
 };
 
